@@ -455,6 +455,7 @@ header {
   border-bottom: solid 1px #275da1;
 }
 
+
 header h1 {
   letter-spacing: -1px;
   font-size: 72px;
@@ -516,7 +517,7 @@ aside#sidebar p.repo-owner a {
   margin-bottom: 40px;
 }
 
-a.button {
+a.button, a.menu-button {
   width: 134px;
   height: 58px;
   line-height: 1.2;
@@ -526,10 +527,24 @@ a.button {
   padding-top: 22px;
   font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
 }
+
 a.button small {
   display: block;
   font-size: 11px;
 }
+
+menu {
+    height: 40px;
+    padding: 5px;
+}
+
+menu a.menu-button {
+  background: transparent url(../images/agni-button.png) 0 0 no-repeat;
+  display: block;
+  padding-right: 4px;
+  float: left;
+}
+
 header a.button {
   position: absolute;
   right: 0;
