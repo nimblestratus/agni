@@ -8,12 +8,21 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
+    <link rel="stylesheet" type="text/css" href="stylesheets/prettify.css" >
+    <script src="javascripts/prettify.js"></script>
+    <script src="https://cdn.rawgit.com/knsv/mermaid/master/dist/mermaid.full.min.js"></script>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
     <title>Agni by nimblestratus</title>
+<script>
+  !function ($) {
+    $(function(){
+      window.prettyPrint && prettyPrint()
+    })
+  }(window.jQuery)
+</script>
   </head>
 
   <body>
@@ -44,8 +53,68 @@
 <img src="images/flocking.jpg" alt="Are ewe flocking?">
 <h2>
 <a id="architecture" class="anchor" href="#architecture" aria-hidden="true"><span class="octicon octicon-link"></span></a>Architecture</h2>
+<h3>Technologies</h3>
+<ul>
+<li>Docker <ul>
+    <li>Docker Language Stacks</li>
+    <li>Docker Registry</li>
+    <li>Swarm</li>
+</li>
+<li>Redis</li>
+</ul>
 
+<h3>Registration</h3>
+<p>
+Functions are registered by a user by sending a message to the Build Queue.
+</p>
+<div class="mermaid">
+graph LR;
+  A(User)-->C>Redis Builder Queue];  
+  C-->D{Builder};
+  E(Docker Language Stacks)-->D;
+  D-->F[Docker Registry];
+  D-->G[Redis Event Listeners];
+  
+  classDef user fill:#aaf;
+  classDef default fill:#aff,stroke:#333,stroke-width:1px;
+  classDef redis fill:#afa;
+  classDef docker fill:#faa;
+  class A user;
+  class C redis;
+  class G redis;
+  class E docker;
+  class F docker;
 
+</div>
+
+<p>A registration message looks like </p>
+<pre class="prettyprint">
+{
+    name: "trilamb",
+    stack: "ruby",
+    code: [
+	{ file: "name",
+	  body: "body"
+	}
+    ],
+    subscribe: "channel",
+    options: {
+      environment: "default"
+    }
+}
+</pre>
+<table>
+<thead>
+<tr><th> Field </th><th> Description </th></tr>
+</thead>
+<tbody>
+<tr><td> name </td><td> Name of the function </td></tr>
+<tr><td> stack </td><td> <a href="http://blog.docker.com/2014/09/docker-hub-official-repos-announcing-language-stacks/">Docker Language Stack</a> to use as function execution space </td></tr>
+<tr><td> subscribe </td><td> Redis channel(s) to trigger the function </td></tr>
+<tr><td> options </td><td> Optional. Used to override default behaviours. At present only the environment is defined. This allows for functions to be executed in a particular swarm space. </td></tr>
+<tr><td> code </td><td> An array of hashes which specify the name and contents of the function. Generally this will include a Dockerfile which is used to build the container. </td></tr>
+</tbody> 
+</table>
 <h2>
 <a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart</h2>
 
@@ -91,6 +160,5 @@
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
-
   </body>
 </html>
